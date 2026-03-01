@@ -70,6 +70,25 @@ bool ExampleApp::Initialize() {
     // 물체 2
     {
         // TODO:
+        MeshData sphere = GeometryGenerator::MakeBox(0.1f);
+        m_meshGroupBox.Initialize(m_device, {sphere});
+        m_meshGroupBox.m_diffuseResView = m_cubeMapping.m_diffuseResView;
+        m_meshGroupBox.m_specularResView = m_cubeMapping.m_specularResView;
+        Matrix modelMat = Matrix::CreateTranslation({0.2f, 0.1f, 0.6f});
+        Matrix invTransposeRow = modelMat;
+        invTransposeRow.Translation(Vector3(0.0f));
+        invTransposeRow = invTransposeRow.Invert().Transpose();
+        m_meshGroupBox.m_basicVertexConstantData.model = modelMat.Transpose();
+        m_meshGroupBox.m_basicVertexConstantData.invTranspose =
+            invTransposeRow.Transpose();
+        m_meshGroupBox.m_basicPixelConstantData.useTexture = false;
+        m_meshGroupBox.m_basicPixelConstantData.material.diffuse =
+            Vector3(0.5f, 0.5f, 0.5f);
+        m_meshGroupBox.m_basicPixelConstantData.material.specular =
+            Vector3(0.0f);
+        m_meshGroupBox.UpdateConstantBuffers(m_device, m_context);
+        m_meshGroupBox.m_basicPixelConstantData.indexColor =
+            Vector4(0.0f, 1.0f, 0.0f, 1.0f);
     }
 
     BuildFilters();
@@ -115,7 +134,15 @@ void ExampleApp::Update(float dt) {
 
     m_meshGroupSphere.UpdateConstantBuffers(m_device, m_context);
 
+
+    m_meshGroupBox.m_basicPixelConstantData.eyeWorld = eyeWorld;
+    m_meshGroupBox.m_basicVertexConstantData.view = viewRow.Transpose();
+    m_meshGroupBox.m_basicVertexConstantData.projection =
+        projRow.Transpose();
+
     // TODO:
+
+    m_meshGroupBox.UpdateConstantBuffers(m_device, m_context);
 
     if (m_dirtyflag && m_filters.size() > 1) {
         m_filters[1]->m_pixelConstData.threshold = m_threshold;
@@ -164,7 +191,7 @@ void ExampleApp::Render() {
     m_meshGroupGround.Render(m_context);
     m_meshGroupSphere.Render(m_context);
     // TODO:
-
+    m_meshGroupBox.Render(m_context);
     // 물체 렌더링 후 큐브매핑
     m_cubeMapping.Render(m_context);
 
