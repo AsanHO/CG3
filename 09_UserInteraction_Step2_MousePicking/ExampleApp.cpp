@@ -63,6 +63,8 @@ bool ExampleApp::Initialize() {
         m_meshGroupSphere.m_basicPixelConstantData.material.specular =
             Vector3(0.0f);
         m_meshGroupSphere.UpdateConstantBuffers(m_device, m_context);
+        m_meshGroupSphere.m_basicPixelConstantData.indexColor =
+            Vector4(1.0f, 0.0f, 0.0f,1.0f);
     }
 
     // 물체 2
@@ -109,6 +111,7 @@ void ExampleApp::Update(float dt) {
         projRow.Transpose();
 
     // TODO:
+    
 
     m_meshGroupSphere.UpdateConstantBuffers(m_device, m_context);
 
@@ -145,8 +148,10 @@ void ExampleApp::Render() {
                                      1.0f, 0);
     // Multiple render targets
     // 인덱스를 저장할 RenderTarget을 추가
-    ID3D11RenderTargetView *targets[] = {m_renderTargetView.Get(),
-                                         m_indexRenderTargetView.Get()};
+    ID3D11RenderTargetView *targets[] = {m_indexRenderTargetView.Get(),
+                                         m_renderTargetView.Get()};
+    /*ID3D11RenderTargetView *targets[] = {m_renderTargetView.Get(),
+                                         m_indexRenderTargetView.Get()};*/
     m_context->OMSetRenderTargets(2, targets, m_depthStencilView.Get());
     m_context->OMSetDepthStencilState(m_depthStencilState.Get(), 0);
 
