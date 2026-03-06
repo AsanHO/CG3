@@ -161,13 +161,21 @@ void ExampleApp::Update(float dt) {
         }
     }
 
-    // 원점의 위치를 옮기지 않기 위해 Translation 추출
+    // 원점의 위치를 옮기지 않기 위해 Translation 추출(제거)
     Vector3 translation = m_mainSphere.m_modelWorldRow.Translation();
-
+    Vector3 pos = m_mainSphere.m_modelWorldRow.Translation();
+    cout << pos.x << " " << pos.y << " " << pos.z << endl;
     // 쿼터니언을 이용한 회전
     // TODO:
     m_mainSphere.m_modelWorldRow.Translation(Vector3(0.0f));
-    m_mainSphere.UpdateModelWorld(m_mainSphere.m_modelWorldRow *Matrix::CreateFromQuaternion(q) *
+    auto &m = m_mainSphere.m_modelWorldRow;
+
+    cout << m._11 << " " << m._12 << " " << m._13 << " " << m._14 << endl;
+    cout << m._21 << " " << m._22 << " " << m._23 << " " << m._24 << endl;
+    cout << m._31 << " " << m._32 << " " << m._33 << " " << m._34 << endl;
+    cout << m._41 << " " << m._42 << " " << m._43 << " " << m._44 << endl;
+    cout << endl;
+    m_mainSphere.UpdateModelWorld(m_mainSphere.m_modelWorldRow * Matrix::CreateFromQuaternion(q) *
                                   Matrix::CreateTranslation(translation));
 
     m_mainSphere.m_basicVertexConstantData.view = viewRow.Transpose();

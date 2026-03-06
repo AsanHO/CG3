@@ -118,9 +118,17 @@ void ExampleApp::Update(float dt) {
     float halfTheta = m_quatTheta * 0.5;
     Quaternion q = Quaternion(sin(halfTheta)*v, cos(halfTheta));
     //Quaternion::CreateFromAxisAngle(v,theta); 를 이용하면 더 편리하게 사용가능(위의 과정이 생략됨)
-
+    m_mainSphere.m_modelWorldRow.Translation(Vector3(0.0f));
     Matrix rot = Matrix::CreateFromQuaternion(q);
-    m_mainSphere.UpdateModelWorld(rot * Matrix::CreateTranslation(translation));
+    auto &m = m_mainSphere.m_modelWorldRow;
+
+    cout << m._11 << " " << m._12 << " " << m._13 << " " << m._14 << endl;
+    cout << m._21 << " " << m._22 << " " << m._23 << " " << m._24 << endl;
+    cout << m._31 << " " << m._32 << " " << m._33 << " " << m._34 << endl;
+    cout << m._41 << " " << m._42 << " " << m._43 << " " << m._44 << endl;
+    cout << endl;
+    m_mainSphere.UpdateModelWorld(m_mainSphere.m_modelWorldRow * rot *
+                                  Matrix::CreateTranslation(translation));
 
 
     m_mainSphere.m_basicVertexConstantData.view = viewRow.Transpose();
