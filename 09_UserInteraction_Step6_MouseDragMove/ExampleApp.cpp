@@ -147,15 +147,30 @@ void ExampleApp::Update(float dt) {
                 m_dragStartFlag = false;
                 prevRatio = dist / (cursorWorldFar - cursorWorldNear).Length();
                 prevPos = pickPoint;
+                cout << "drag Start" << prevPos.x << " " << prevPos.y << " "
+                     << prevPos.z << endl;
             } else {
-                //TODO:
+                // TODO:
+
+                Vector3 newPos = cursorWorldNear +
+                                 prevRatio * (cursorWorldFar - cursorWorldNear);
+                if ((newPos - prevPos).Length() > 1e-3)
+
+                {
+                    dragTranslation = newPos - prevPos;
+                    cout << "drag end" << dragTranslation.x << " "
+                         << dragTranslation.y << " " << dragTranslation.z
+                         << endl;
+                    prevPos = newPos;
+                }
             }
         }
     }
 
     // 물체 이동
-    m_mainSphere.UpdateModelWorld(m_mainSphere.m_modelWorldRow *
-                                  Matrix::CreateTranslation(dragTranslation));
+    m_mainSphere.UpdateModelWorld(
+        m_mainSphere.m_modelWorldRow *
+        Matrix::CreateTranslation(Vector3(dragTranslation)));
 
     // Bounding Sphere도 같이 이동
     m_mainBoundingSphere.Center = m_mainSphere.m_modelWorldRow.Translation();
