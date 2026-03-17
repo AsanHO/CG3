@@ -80,11 +80,11 @@ float intersect_ray_sphere(float3 origin, float3 direction, float3 center, float
 PixelShaderOutput main(PixelShaderInput input)
 {
     // TODO: 
-    float3 eye = eyeWorld;
-    float3 dir = normalize(input.posWorld.xyz - eye);
-    float3 sphere_pos = input.center.xyz;
-    float radiusScale = width;
-    float currentTime = time + input.primID;
+    float3 eye = float3(0.5, 0.5, -1.9);
+    float3 dir = normalize(float3(input.texCoord.x, input.texCoord.y, 0.0) - eye);
+    float3 sphere_pos = float3(0.5, 0.5, 0.0);
+    float radiusScale = 1.0;
+    float currentTime = 1.0;
         
     float intensity = 0.;
     
@@ -108,7 +108,6 @@ PixelShaderOutput main(PixelShaderInput input)
             float alpha = g_texArray.Sample(g_sampler, float3(uv, 0)).r;
             intensity += step(1.0 - float(i) / 6.0, alpha) * 0.6 * alpha * max(0., dot(float3(0, 0, 1.), normal) + 1.0);
         }
-        
     }
     
     float3 glow = fire_color(2.) * max(0., 1.3 - 1.8 * length(input.texCoord * 2.0 - 1.0));
@@ -119,6 +118,5 @@ PixelShaderOutput main(PixelShaderInput input)
     
     // TODO:
     clip(dot(output.pixelColor.rgb, float3(1.0, 1.0, 1.0)) - 0.1);
- 
     return output;
 }
