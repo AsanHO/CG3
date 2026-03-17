@@ -27,7 +27,7 @@ struct PixelShaderInput
 //TODO: PointStream -> TriangleStream
 [maxvertexcount(100)] // 최대 출력 Vertex 갯수
 void main(point GeometryShaderInput input[1], uint primID : SV_PrimitiveID,
-                              inout PointStream<PixelShaderInput> outputStream)
+                              inout TriangleStream<PixelShaderInput> outputStream)
 {
     
     // float hw = 0.5 * width;
@@ -36,9 +36,36 @@ void main(point GeometryShaderInput input[1], uint primID : SV_PrimitiveID,
     
     output.pos = input[0].pos;
     
-    for (int i = 0; i < 100; i ++)
+   {
+    
+        output.pos = input[0].pos + float4(0.0, 0.0, 0.0, 0.0);
+        output.pos = mul(output.pos, view);
+        output.pos = mul(output.pos, proj);
+        output.primID = primID;
+
+        outputStream.Append(output);
+    }
     {
-        output.pos = input[0].pos + float4(0.0, 0.003, 0.0, 0.0) * float(i);
+    
+        output.pos = input[0].pos + float4(0.0, 0.04, 0.0, 0.0);
+        output.pos = mul(output.pos, view);
+        output.pos = mul(output.pos, proj);
+        output.primID = primID;
+
+        outputStream.Append(output);
+    }
+    {
+    
+        output.pos = input[0].pos + float4(0.04, 0.00, 0.0, 0.0);
+        output.pos = mul(output.pos, view);
+        output.pos = mul(output.pos, proj);
+        output.primID = primID;
+
+        outputStream.Append(output);
+    }
+    {
+    
+        output.pos = input[0].pos + float4(0.04, 0.04, 0.0, 0.0);
         output.pos = mul(output.pos, view);
         output.pos = mul(output.pos, proj);
         output.primID = primID;
