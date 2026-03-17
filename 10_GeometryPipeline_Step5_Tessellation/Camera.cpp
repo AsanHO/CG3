@@ -34,7 +34,7 @@ void Camera::MoveForward(float dt) {
 }
 
 void Camera::MoveRight(float dt) { m_position += m_rightDir * m_speed * dt; }
-
+      
 void Camera::SetAspectRatio(float aspect) { m_aspect = aspect; }
 
 Matrix Camera::GetProjRow() {

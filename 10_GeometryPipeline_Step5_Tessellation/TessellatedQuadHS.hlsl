@@ -31,16 +31,35 @@ struct PatchConstOutput
 PatchConstOutput MyPatchConstantFunc(InputPatch<VertexOut, 4> patch,
                                      uint patchID : SV_PrimitiveID)
 {
+    float3 center = (patch[0].pos.xyz +
+                 patch[1].pos.xyz +
+                 patch[2].pos.xyz +
+                 patch[3].pos.xyz) * 0.25;
+    float dist = length(center - eyeWorld);
+
+    float minDist = 0.5;
+    float maxDist = 20.0;
+
+   // 0~1로 정규화
+    float t = saturate((dist - minDist) / (maxDist - minDist));
+
+    // 반대로 뒤집기
+    t = 1.0 - t;
+
+    // tess factor 범위
+    float minTess = 1.0;
+    float maxTess = 16.0;
+
+    float tess = lerp(minTess, maxTess, t);
     PatchConstOutput pt;
-    
-    pt.edges[0] = edges[0];
-    pt.edges[1] = edges[1];
-    pt.edges[2] = edges[2];
-    pt.edges[3] = edges[3];	
-    pt.inside[0] = inside[0];
-    pt.inside[1] = inside[1];
-	
+    pt.edges[0] = tess;
+    pt.edges[1] = tess;
+    pt.edges[2] = tess;
+    pt.edges[3] = tess;
+    pt.inside[0] = tess;
+    pt.inside[1] = tess;
     return pt;
+    
 }
 
 [domain("quad")]
