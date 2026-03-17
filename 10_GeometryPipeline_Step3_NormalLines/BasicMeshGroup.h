@@ -61,9 +61,10 @@ class BasicMeshGroup {
 
     // 메쉬의 노멀 벡터 그리기
     ComPtr<ID3D11VertexShader> m_normalVertexShader;
+    ComPtr<ID3D11GeometryShader> m_normalGeometryShader;
     ComPtr<ID3D11PixelShader> m_normalPixelShader;
 
-    shared_ptr<Mesh> m_normalLines;
+    /*shared_ptr<Mesh> m_normalLines;*/
 
     ComPtr<ID3D11Buffer> m_normalVertexConstantBuffer;
     ComPtr<ID3D11Buffer> m_normalPixelConstantBuffer;
